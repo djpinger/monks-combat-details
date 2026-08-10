@@ -60,8 +60,6 @@
 	"MonksCombatDetails.prevent-initiative.hint": "すべてのイニシアチブが決定していない場合、戦闘が開始できなくなります。",
 	"MonksCombatDetails.hide-until-turn.name": "ターンが来るまで敵を隠す",
 	"MonksCombatDetails.hide-until-turn.hint": "自分のターンが来るまで、イニシアチブ表に敵が表示されなくなります。",
-	"MonksCombatDetails.large-print.name": "ターン通知を大きく表示",
-	"MonksCombatDetails.large-print.hint": "ターン通知の表示が大きくなります。",
 	"MonksCombatDetails.prevent-combat-spells.name": "準備呪文の変更を防止",
 	"MonksCombatDetails.prevent-combat-spells.hint": "戦闘中、準備済の呪文が変更されるのを防止します。",
 	"MonksCombatDetails.select-combatant.name": "戦闘中のコマを自動選択",

@@ -321,6 +321,14 @@ export const registerSettings = function () {
 		default: (game.system.id == 'D35E' || game.system.id == 'pf1' ? 'npc-negative' : 'npc-zero'),
 		type: String,
 	});
+	game.settings.register(modulename, "hide-defeated-main", {
+		name: i18n("MonksCombatDetails.hide-defeated-main.name"),
+		hint: i18n("MonksCombatDetails.hide-defeated-main.hint"),
+		scope: "world",
+		config: true,
+		default: false,
+		type: Boolean,
+	});
 	game.settings.register(modulename, "auto-reveal", {
 		name: i18n("MonksCombatDetails.auto-reveal.name"),
 		hint: i18n("MonksCombatDetails.auto-reveal.hint"),
@@ -394,31 +402,32 @@ export const registerSettings = function () {
 		default: i18n("MonksCombatDetails.Turn"),
 		type: String,
 	});
+	game.settings.register(modulename, "nextup-file", {
+		name: i18n("MonksCombatDetails.nextup-file.name"),
+		hint: i18n("MonksCombatDetails.nextup-file.hint"),
+		scope: "client",
+		config: true,
+		default: "",
+		type: String,
+		filePicker: true
+	});
+	game.settings.register(modulename, "turn-file", {
+		name: i18n("MonksCombatDetails.turn-file.name"),
+		hint: i18n("MonksCombatDetails.turn-file.hint"),
+		scope: "client",
+		config: true,
+		default: "",
+		type: String,
+		filePicker: true
+	});
 	game.settings.register(modulename, "large-print", {
 		name: i18n("MonksCombatDetails.large-print.name"),
 		hint: i18n("MonksCombatDetails.large-print.hint"),
 		scope: "client",
-		config: true,
+		config: false,
 		default: false,
 		type: Boolean,
 		requiresReload: true
-	});
-	game.settings.register(modulename, "large-print-size", {
-		name: i18n("MonksCombatDetails.large-print-size.name"),
-		hint: i18n("MonksCombatDetails.large-print-size.hint"),
-		scope: "client",
-		config: true,
-		range: {
-			min: 50,
-			max: 120,
-			step: 5,
-		},
-		default: 80,
-		type: Number,
-		onChange: (value) => {
-			// change the css variable
-			document.querySelector(':root').style.setProperty("--MonksCombatDetails-large-print-size", value + "px");
-		},
 	});
 	game.settings.register(modulename, "play-next-sound", {
 		name: i18n("MonksCombatDetails.next-sound.name"),

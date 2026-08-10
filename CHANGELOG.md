@@ -1,3 +1,17 @@
+# Version 14.03
+
+Changed the next and your turn messages to be able to use custom html files.  Anyone using the old large size format should be converted to html files that match what they were displaying.  There is an issue to be aware of that Foundry doesn't allow selecting html files in the file picker.  So you'll unfortunately have to type in the file name.
+
+Allow multiple turn messages to be displayed instead of just one.  In case you currently have a turn, and you're up next.
+
+Fixed an issue where setting the combat playlist to something the first time was causing Foundry to reload improperly
+
+Added the option to hide defeated on the side bar combat tracker.
+
+Fixed an issue where hide defated was still showing defeated actors to players, when it should have been player only.
+
+Fixed issues with assigning the defeated status
+
 # Version 14.02
 
 Fixing an issue with setPosition that was blocking MonksCommonDisplay

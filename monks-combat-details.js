@@ -156,6 +156,9 @@ export class MonksCombatDetails {
 
 		patchFunc("foundry.applications.apps.CombatTrackerConfig.prototype._onSubmitForm", async (wrapped, ...args) => {
 			let [formConfig, event] = args;
+
+			event.preventDefault();
+
 			const form = event.currentTarget;
 			const formData = new foundry.applications.ux.FormDataExtended(form);
 
@@ -169,7 +172,7 @@ export class MonksCombatDetails {
 							playlist.stopAll();
 						}
 					} else {
-						let currentlyPlaying = ui.playlists._playingSounds.map(ps => ps.playing ? ps.uuid : null).filter(p => !!p);
+						let currentlyPlaying = ui.playlists._playing.sounds.map(ps => ps.playing ? ps.uuid : null).filter(p => !!p);
 						for (let playing of currentlyPlaying) {
 							let sound = await fromUuid(playing);
 							sound.update({ playing: false, pausedTime: sound.sound.currentTime });
@@ -337,7 +340,11 @@ export class MonksCombatDetails {
 	static async ready() {
 		game.socket.on(MonksCombatDetails.SOCKET, MonksCombatDetails.onMessage);
 
-		document.querySelector(':root').style.setProperty("--MonksCombatDetails-large-print-size", setting("large-print-size") + "px");
+		if (setting("large-print")) {
+			game.settings.set("monks-combat-details", "nextup-file", "modules/monks-combat-details/templates/large_print_next_turn.hbs");
+			game.settings.set("monks-combat-details", "turn-file", "modules/monks-combat-details/templates/large_print_your_turn.hbs");
+			game.settings.set("monks-combat-details", "large-print", false);
+		}
 
 		CombatTurn.ready();
 		CombatTurn.checkCombatTurn(game.combats.active);
@@ -725,7 +732,7 @@ Hooks.on('renderCombatTracker', async (app, html, data) => {
 		}
 	}
 
-	if (app.isPopout) {
+	if (app.isPopout || !game.user.isGM || setting("hide-defeated-main")) {
 		$(html).toggleClass("hide-defeated", setting("hide-defeated") == true);
 	}
 
@@ -780,9 +787,11 @@ Hooks.on('renderCombatTracker', async (app, html, data) => {
 	}
 
 	$(".token-effects .token-effect", html).each((i, el) => {
-		let effect = CONFIG.statusEffects.find(e => e.id === el.dataset.statusId || e.icon == el.getAttribute("src"));
+        let effects = Array.isArray(CONFIG.statusEffects) ? CONFIG.statusEffects : Object.values(CONFIG.statusEffects);
+		let effect = effects.find(e => e.id === el.dataset.statusId || e.icon == el.getAttribute("src") || e.img == el.getAttribute("src"));
+
 		if (effect) {
-			$(el).attr("data-tooltip", i18n(effect.label));
+			$(el).attr("data-tooltip", i18n(effect.label || effect.name));
 		}
 	});
 
@@ -933,7 +942,8 @@ Hooks.on("updateCombatant", async function (combatant, data, options, userId) {
 		const a = combatant.token?.actor;
 
 		if (a) {
-			let effect = CONFIG.statusEffects.find(e => e.id === CONFIG.specialStatusEffects.DEFEATED) || CONFIG.controlIcons.defeated;
+            let effects = Array.isArray(CONFIG.statusEffects) ? CONFIG.statusEffects : Object.values(CONFIG.statusEffects);
+			let effect = effects.find(e => e.id === CONFIG.specialStatusEffects.DEFEATED) || CONFIG.controlIcons.defeated;
 			const exists = a.statuses.has(effect?.id ?? effect);
 			if (exists != data.defeated) {
 				await a.toggleStatusEffect(effect?.id ?? effect, { active: data.defeated });

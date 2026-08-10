@@ -282,9 +282,7 @@ export class CombatTurn {
 
         game.user.setFlag('monks-combat-details', 'remember-previous', setting("remember-previous"));
 
-        if (setting("large-print")) {
-            $("<div>").attr("id", "your-turn").appendTo('body');
-        }
+        $("<div>").attr("id", "combat-turn-message").appendTo('body');
     }
 
     static removeShadow(id) {
@@ -299,7 +297,7 @@ export class CombatTurn {
         CombatTurn.shadows = {};
     }
 
-    static doDisplayTurn(combatant) {
+    static async doDisplayTurn(combatant) {
         if (setting("showcurrentup") && !game.user.isGM) {
             let msg = setting("turn-message");
 
@@ -311,10 +309,27 @@ export class CombatTurn {
             const compiled = Handlebars.compile(msg);
             msg = compiled(context, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true }).trim();
 
-            if (setting("large-print")) {
-                $('#your-turn').addClass("current").removeClass("next").html(msg).addClass("show");
-                window.setTimeout(() => { $("#your-turn").removeClass("show current"); }, 2000);
-            } else
+            let show_as_notification = true;
+            if (setting("turn-file")) {
+                context.message = msg;
+                let filepath = setting("turn-file");
+                try {
+                    let html = await foundry.applications.handlebars.renderTemplate(filepath, context);
+                    if (html) {
+                        show_as_notification = false;
+                        let element = $(html);
+                        $('#combat-turn-message').append(element)
+                        window.setTimeout(() => {
+                            element.on('transitionend', (event) => {
+                                element.remove();
+                            });
+                            element.addClass("hide");
+                        }, 2000);
+                    }
+                } catch (err) {
+                }
+            }
+            if (show_as_notification)
                 ui.notifications.warn(msg);
         } 
 
@@ -324,7 +339,7 @@ export class CombatTurn {
         }
     }
 
-    static doDisplayNext(combatant) {
+    static async doDisplayNext(combatant) {
         if (setting("shownextup") && !game.user.isGM) {
             let msg = setting("nextup-message");
 
@@ -336,10 +351,27 @@ export class CombatTurn {
             const compiled = Handlebars.compile(msg);
             msg = compiled(context, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true }).trim();
 
-            if (setting("large-print")) {
-                $('#your-turn').addClass("next").removeClass("current").html(msg).addClass("show");
-                window.setTimeout(() => { $("#your-turn").removeClass("show next"); }, 2000);
-            } else 
+            let show_as_notification = true;
+            if (setting("nextup-file")) {
+                context.message = msg;
+                let filepath = setting("nextup-file");
+                try {
+                    let html = await foundry.applications.handlebars.renderTemplate(filepath, context);
+                    if (html) {
+                        show_as_notification = false;
+                        let element = $(html);
+                        $('#combat-turn-message').append(element)
+                        window.setTimeout(() => {
+                            element.on('transitionend', (event) => {
+                                element.remove();
+                            });
+                            element.addClass("hide");
+                        }, 2000);
+                    }
+                } catch (err) {
+                }
+            }
+            if (show_as_notification)
                 ui.notifications.info(msg);
         }
         // play a sound

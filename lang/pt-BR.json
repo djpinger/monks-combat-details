@@ -60,8 +60,6 @@
 	"MonksCombatDetails.prevent-initiative.hint": "Impedir o início do combate se nem todas as iniciativas tiverem sido roladas",
 	"MonksCombatDetails.hide-until-turn.name": "Esconder Até Turno",
 	"MonksCombatDetails.hide-until-turn.hint": "Esconder inimigos no 'combat tracker' até eles terem seu turno",
-	"MonksCombatDetails.large-print.name": "Tamanho Grande",
-	"MonksCombatDetails.large-print.hint": "Mostrar as notificações de turno em um tamanho maior",
 	"MonksCombatDetails.prevent-combat-spells.name": "Impedir Alterações em Magias",
 	"MonksCombatDetails.prevent-combat-spells.hint": "Quando um token está em combate, impedir que suas magias preparadas sejam alteradas.",
 	"MonksCombatDetails.select-combatant.name": "Selecionar Combatante",
