@@ -990,6 +990,12 @@ Hooks.on("renderCombatTrackerConfig", (app, html, data) => {
 });
 
 Hooks.on("getCombatTrackerContextOptions", (html, menu) => {
+	// pf2e-hud reuses core's EncounterTracker._doEvent internals to build its own
+	// combat-tracker context menu and does not pass a real array here. Bail out
+	// rather than crash on menu.unshift; the two entries below just don't appear
+	// on pf2e-hud's synthetic menu (they still work on the native tracker).
+	if (!Array.isArray(menu)) return;
+
 	menu.unshift({
 		name: i18n("MonksCombatDetails.SetCurrentCombatant"),
 		icon: '<i class="fas fa-list-timeline"></i>',

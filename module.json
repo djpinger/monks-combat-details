@@ -69,8 +69,8 @@
     "css/monks-combat-details.css"
   ],
   "url": "https://github.com/ironmonk108/monks-combat-details",
-  "download": "https://github.com/ironmonk108/monks-combat-details/archive/14.03.zip",
-  "manifest": "https://github.com/ironmonk108/monks-combat-details/releases/latest/download/module.json",
+  "download": "https://github.com/djpinger/monks-combat-details/archive/refs/heads/personal/pf2e-status-effects-fix.zip",
+  "manifest": "https://raw.githubusercontent.com/djpinger/monks-combat-details/personal/pf2e-status-effects-fix/module.json",
   "bugs": "https://github.com/ironmonk108/monks-combat-details/issues",
   "id": "monks-combat-details",
   "compatibility": {
